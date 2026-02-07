@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Blog</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/main.js" defer></script>
+</head>
+<body>
+
+    <header>
+        <h1>📝 My Blog</h1>
+        <p>Write. Edit. Delete. Read.</p>
+    </header>
+
+    <!-- ADD NEW BLOG POST -->
+    <section class="new-post">
+        <h2>Add New Post</h2>
+
+        <!-- Backend will handle POST request -->
+        <form action="/posts" method="POST">
+            <input type="text" name="title" placeholder="Post title" required>
+
+            <textarea name="content" placeholder="Write your blog here..." required></textarea>
+
+            <button type="submit">Publish</button>
+        </form>
+    </section>
+
+    <!-- BLOG POSTS LIST -->
+    <section class="posts">
+        <h2>All Posts</h2>
+
+        <!-- ONE BLOG POST (repeat this from backend) -->
+       <% if(locals.blog == true){  %>
+        <% for(let i = 0; i < post.length; i++){ %>
+            <article class="post" id = '<%= post[i].id %>'>
+                <h3><%= post[i].title %></h3>
+                <p><%= post[i].content %></p>
+            
+                <div class="post-actions">
+                    <!-- Edit -->
+                    <button type="submit" class="edit">Edit</a>
+                    <!-- Delete -->
+                    <button type="submit" class="delete">Delete</button>
+                </div>
+            </article>
+        <% } %>  
+
+   <% } else{ %> 
+        <!-- If no posts -->
+        <p class="empty">No blogs yet. Start writing ✍️</p>
+   <% }  %>
+    </section>
+
+</body>
+</html>
