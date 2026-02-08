@@ -5,6 +5,7 @@ const app = express();
 
 let id = 0;
 let posts = [];
+let isPost = false;
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -12,14 +13,20 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.get('/', (req, res)=>{
-    res.render('index', {blog: false});
+    if(!isPost){
+        res.render('index', {blog: false});
+    }
+    else{
+        res.render('index', {blog: true, post: posts});
+    }
 });
 
 app.post('/posts', (req, res)=>{
     const data = req.body;
     id++;
     posts.push({id: id, title: data.title, content: data.content});
-    res.render('index', {blog: true, post: posts});
+    isPost = true;
+    res.redirect(303, '/');
 });
 
 app.post('/delete/:id', (req, res)=>{
@@ -30,7 +37,14 @@ app.post('/delete/:id', (req, res)=>{
             break;
         }
     }
-    res.render('index', {blog: true, post: posts});
+    if(posts.length == 0){
+        isPost = false;
+        res.redirect(303, '/');
+    }
+    else{
+        res.redirect(303, '/');
+    }
+    
 });
 
 app.post('/edit/:id', (req, res)=>{
@@ -42,7 +56,7 @@ app.post('/edit/:id', (req, res)=>{
             break;
         }
     }
-    res.render('index', {blog: true, post: posts});
+    res.redirect(303, '/');
 });
 
 app.listen(3000, ()=>{
